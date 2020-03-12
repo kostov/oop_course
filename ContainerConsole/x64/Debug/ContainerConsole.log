@@ -1,0 +1,8 @@
+﻿  Shapes.cpp
+C:\Users\Amir\source\repos\Gorrgonzola\oop_course\ContainerConsole\Shapes.h(26,39): error C2061: syntax error: identifier 'string'
+C:\Users\Amir\source\repos\Gorrgonzola\oop_course\ContainerConsole\Shapes.h(26,39): error C2535: 'Rect::Rect(Point,Point)': member function already defined or declared
+C:\Users\Amir\source\repos\Gorrgonzola\oop_course\ContainerConsole\Shapes.h(25): message : see declaration of 'Rect::Rect'
+C:\Users\Amir\source\repos\Gorrgonzola\oop_course\ContainerConsole\Shapes.cpp(31,2): error C2511: 'Rect::Rect(Point,Point,std::string)': overloaded member function not found in 'Rect'
+C:\Users\Amir\source\repos\Gorrgonzola\oop_course\ContainerConsole\Shapes.h(21): message : see declaration of 'Rect'
+C:\Users\Amir\source\repos\Gorrgonzola\oop_course\ContainerConsole\Shapes.cpp(32,1): error C2550: 'Rect::{ctor}': constructor initializer lists are only allowed on constructor definitions
+C:\Users\Amir\source\repos\Gorrgonzola\oop_course\ContainerConsole\Shapes.cpp(37,27): error C2661: 'Rect::Rect': no overloaded function takes 3 arguments

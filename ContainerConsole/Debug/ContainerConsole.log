@@ -1,2 +1,7 @@
-﻿  ContainerConsole.cpp
-  ContainerConsole.vcxproj -> C:\Users\Amir\Source\Repos\Gorrgonzola\oop_course\ContainerConsole\Debug\ContainerConsole.exe
+﻿ContainerConsole.obj : error LNK2019: unresolved external symbol "public: __thiscall Class<int>::Class<int>(unsigned int)" (??0?$Class@H@@QAE@I@Z) referenced in function _main
+ContainerConsole.obj : error LNK2019: unresolved external symbol "public: __thiscall Class<int>::Class<int>(class Class<int> const &)" (??0?$Class@H@@QAE@ABV0@@Z) referenced in function _main
+ContainerConsole.obj : error LNK2019: unresolved external symbol "public: __thiscall Class<int>::~Class<int>(void)" (??1?$Class@H@@QAE@XZ) referenced in function _main
+ContainerConsole.obj : error LNK2019: unresolved external symbol "public: int & __thiscall Class<int>::operator[](unsigned int)" (??A?$Class@H@@QAEAAHI@Z) referenced in function _main
+ContainerConsole.obj : error LNK2019: unresolved external symbol "public: void __thiscall Class<int>::push_back(int const &)" (?push_back@?$Class@H@@QAEXABH@Z) referenced in function _main
+ContainerConsole.obj : error LNK2019: unresolved external symbol "public: unsigned int __thiscall Class<int>::size(void)" (?size@?$Class@H@@QAEIXZ) referenced in function _main
+C:\Users\Amir\source\repos\Gorrgonzola\oop_course\ContainerConsole\Debug\ContainerConsole.exe : fatal error LNK1120: 6 unresolved externals
