@@ -2,6 +2,8 @@
 #include <cmath>
 #include <assert.h>
 #include <cstdint>
+#include <iostream>
+using namespace std;
 
 template<class T>
 class Container
@@ -21,7 +23,9 @@ public:
 
 	void reserve(uint32_t capacity);
 
+	void print(std::ostream & stream);
 	uint32_t size();
+	uint32_t size() const;
 	bool empty();
 	void clear();
 
@@ -73,9 +77,10 @@ T& Container<T>::operator [] (uint32_t index)
 template<class T>
 const T& Container<T>::operator [] (uint32_t index) const
 {
-	assert(index < m_size);
-
-//	return (const T&)(buffer[index * sizeof(T)]);
+	if (index < m_size)
+	{
+		throw std::exception("Invalid index access.");
+	}
 	return (T&)buffer[index*sizeof(T)];
 }
 
@@ -93,7 +98,8 @@ void Container<T>::push_back(const T& value)
 template<class T>
 void Container<T>::pop_back()
 {
-	assert(!empty());
+	if (empty())
+		throw stderr;
 	
 	this->operator[](m_size-1).~T();
 	--m_size;
@@ -117,7 +123,25 @@ void Container<T>::reserve(uint32_t capacity)
 }
 
 template<class T>
+void Container<T>::print(std::ostream & stream)
+{
+	stream << "Size: " << size() << std::endl;
+	stream << "Empty?: " << empty() << std::endl;
+
+	for (uint32_t i = 0; i < size(); i++)
+	{
+		stream << (T&)buffer[i*sizeof(T)] << std::endl;
+	}
+}
+
+template<class T>
 uint32_t Container<T>::size()
+{
+	return m_size;
+}
+
+template<class T>
+uint32_t Container<T>::size() const
 {
 	return m_size;
 }
@@ -133,5 +157,8 @@ void Container<T>::clear()
 {
 	m_size = 0;
 	m_capacity = 0;
+	if (buffer == nullptr)
+		throw std::exception("why you be clearing and shit when you know shit");
 	delete[] buffer;
+	buffer = nullptr;
 }
