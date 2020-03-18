@@ -1,2 +1,9 @@
-﻿  Shapes.cpp
-  ContainerConsole.vcxproj -> C:\Users\Amir\source\repos\Gorrgonzola\oop_course\ContainerConsole\x64\Debug\ContainerConsole.exe
+﻿  ContainerConsole.cpp
+C:\Users\Amir\source\repos\Gorrgonzola\oop_course\ContainerConsole\Container.h(117,13): error C2100: illegal indirection
+C:\Users\Amir\source\repos\Gorrgonzola\oop_course\ContainerConsole\Container.h(111): message : while compiling class template member function 'void Container<int>::print(std::ostream &) const'
+C:\Users\Amir\source\repos\Gorrgonzola\oop_course\ContainerConsole\ContainerConsole.cpp(30): message : see reference to function template instantiation 'void Container<int>::print(std::ostream &) const' being compiled
+C:\Users\Amir\source\repos\Gorrgonzola\oop_course\ContainerConsole\ContainerConsole.cpp(28): message : see reference to class template instantiation 'Container<int>' being compiled
+C:\Users\Amir\source\repos\Gorrgonzola\oop_course\ContainerConsole\Container.h(117,10): error C2088: '<<': illegal for class
+  ShapeFactory.cpp
+  Shapes.cpp
+  Generating Code...

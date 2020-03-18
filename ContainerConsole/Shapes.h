@@ -4,82 +4,84 @@
 #include <string>
 using namespace std;
 
-class Shape : public Printable
+class Shape : public Named
 {
 public:
-	Shape() { ++m_shapes; }
-	~Shape() { --m_shapes; }
+	Shape(const string & name) : Named(name) { ++m_shapes; }
+	~Shape() { cout << "Hello\n"; --m_shapes; }
 	virtual void print(ostream& out) const = 0;
 	friend ostream& operator << (ostream& ioStream, const Shape& p)
 	{
+		ioStream << p.m_name << endl;
 		p.print(ioStream);
 		return ioStream;
 	}
-	static int GetCount() { return m_shapes; }
+	static int getCount() { return m_shapes; }
 private:
 	static int m_shapes;
 };
 
-class Point : public Shape, Named
+class Point : public Shape
 {
 public:
 	Point(float x, float y);
-	float X();
-	float Y();
+	float X() const;
+	float Y() const;
 	void print(ostream & out) const;
 private:
 	float m_x, m_y;
 };
 
-class Circle : public Shape, Named
+class Circle : public Shape
 {
 public:
-	Circle(float radius, float x, float y);
+	Circle(float radius, Point & p);
 	void print(ostream& out) const;
 private:
 	float m_radius, m_area;
-	Point m_center;
+	Point * m_center;
 };
 
-class Rect : public Shape, Named
+class Rect : public Shape
 {
 public:
-	Rect(const Point & x1, const Point & x2);
+	Rect(Point & x1, Point & x2);
 	void print(ostream& out) const;
 private:
-	Point m_x1, m_x2;
+	Point * m_x1, * m_x2;
 	float m_area;
 };
 
-class Square : public Shape, Named
+class Square : public Shape
 {
 public:
-	Square(const Point & center, float side);
+	Square(Point & center, float side);
 	void print(ostream& out) const;
 private:
-	Point m_center;
+	Point * m_center;
 	float m_side, m_area;
 };
 
-class Polyline : public Shape, Named
+class Polyline : public Shape
 {
 public:
-	Polyline();
-	void AddPoint(const Point & point);
+	Polyline(Container<Point *> & points);
+	~Polyline();
+	void addPoint(const Point & point);
+	void calcLength();
 	float getLength() const;
-	friend ostream& operator << (ostream& ioStream, const Polyline& p);
 	void print(ostream& out) const;
 private:
-	void CalcLength();
-	Container<Point> m_points;
+	Container<Point *> * m_points;
 	float m_length;
 };
 
-class Polygon : public Shape, Named
+class Polygon : public Shape
 {
 public:
-	Polygon(const Container<Point> & data);
+	Polygon(Polyline & data);
+	~Polygon();
 	void print(ostream& out) const;
 private:
-	Polyline m_data;
+	Polyline * m_data;
 };

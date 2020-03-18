@@ -13,20 +13,22 @@ public:
 	Container();
 	Container(uint32_t size);
 	Container(const Container<T>& other);
-	~Container();
 
-	T & operator[] (uint32_t index);
-	const T & operator[] (uint32_t index) const;
+	T & operator[] (uint32_t index) const;
 
 	void push_back(const T& value);
 	void pop_back();
-
 	void reserve(uint32_t capacity);
 
-	void print(std::ostream & stream);
-	uint32_t size();
-	uint32_t size() const;
-	bool empty();
+	void print(std::ostream & stream) const;
+	uint32_t size() const
+	{
+		return m_size;
+	}
+	bool empty() const
+	{
+		return m_size == 0;
+	}
 	void clear();
 
 private:
@@ -61,48 +63,30 @@ Container<T>::Container(const Container<T>& other)
 }
 
 template<class T>
-Container<T>::~Container()
+T& Container<T>::operator [] (uint32_t index) const
 {
-	clear();
-}
-
-template<class T>
-T& Container<T>::operator [] (uint32_t index)
-{
-	assert(index < m_size);
-	//std::cout << dynamic_cast<T*>(&(buffer+index * sizeof(T))) << std::endl;
-	return (T&)buffer[index * sizeof(T)];
-}
-
-template<class T>
-const T& Container<T>::operator [] (uint32_t index) const
-{
-	if (index < m_size)
-	{
-		throw std::exception("Invalid index access.");
-	}
+	if (index >= m_size) throw exception("Invalid memory access.\n");
 	return (T&)buffer[index*sizeof(T)];
 }
 
 template<class T>
-void Container<T>::push_back(const T& value)
+void Container<T>::push_back(const T & value)
 {
 	if (m_size == m_capacity)
 	{
 		reserve(m_capacity*2+1);
 	}
 	new(buffer + m_size*sizeof(T)) T(value);
-	++m_size;
+	m_size++;
 }
 
 template<class T>
 void Container<T>::pop_back()
 {
-	if (empty())
-		throw stderr;
+	if (empty()) throw exception("Invalid memory access.\n");
 	
 	this->operator[](m_size-1).~T();
-	--m_size;
+	m_size--;
 }
 
 template<class T>
@@ -123,42 +107,26 @@ void Container<T>::reserve(uint32_t capacity)
 }
 
 template<class T>
-void Container<T>::print(std::ostream & stream)
+void Container<T>::print(std::ostream & stream) const
 {
 	stream << "Size: " << size() << std::endl;
-	stream << "Empty?: " << empty() << std::endl;
-
-	for (uint32_t i = 0; i < size(); i++)
+	stream << "Empty: " << empty() << std::endl;
+	uint32_t s = size();
+	for (uint32_t i = 0; i < s; i++)
 	{
-		stream << (T&)buffer[i*sizeof(T)] << std::endl;
+		stream << *((T&)buffer[i*sizeof(T)]) << std::endl;
 	}
-}
-
-template<class T>
-uint32_t Container<T>::size()
-{
-	return m_size;
-}
-
-template<class T>
-uint32_t Container<T>::size() const
-{
-	return m_size;
-}
-
-template<class T>
-bool Container<T>::empty()
-{
-	return m_size == 0;
 }
 
 template<class T>
 void Container<T>::clear()
 {
+	//if (!buffer) throw exception("why you be clearing and shit when you know shit");
+	for (uint32_t i = 0; i < m_size; i++)
+	{
+		pop_back();
+	}
 	m_size = 0;
 	m_capacity = 0;
-	if (buffer == nullptr)
-		throw std::exception("why you be clearing and shit when you know shit");
-	delete[] buffer;
-	buffer = nullptr;
+	delete buffer;
 }

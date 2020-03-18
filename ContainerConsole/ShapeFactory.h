@@ -6,6 +6,7 @@ class ShapeFactory
 {
 public:
     static Shape * makeShape(ShapeType name);
-    static float createRandomValue(uint32_t max);
+    static float createRandomFloat(uint32_t max);
+    static uint32_t createRandomUInt(uint32_t max);
 };
 

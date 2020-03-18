@@ -7,91 +7,102 @@ using namespace std;
 int Shape::m_shapes = 0;
 
 Point::Point(float x, float y)
-	: m_x(x), m_y(y), Named("Point") {}
+	: Shape("Point"), m_x(x), m_y(y) {}
 
-float Point::X() { return m_x; }
-float Point::Y() { return m_y; }
+float Point::X() const { return m_x; }
+float Point::Y() const { return m_y; }
 
 void Point::print(ostream& out) const
 { 
 	out << "(" << m_x << ", " << m_y << ")" << endl; 
 }
 
-Circle::Circle(float radius, float x, float y)
-	: m_center(x,y), m_radius(radius), Named("Circle")
+Circle::Circle(float radius, Point & p)
+	: Shape("Circle"), m_center(&p), m_radius(radius)
 {
 	m_area = (float)M_PI * m_radius * m_radius;
 }
 
 void Circle::print(ostream& out) const
 {
-	m_center.print(out);
-	out << " radius: " << m_radius << " area: " << m_area << endl;
+	m_center->print(out);
+	out << "Radius: " << m_radius << " Area: " << m_area << endl;
 }
 
-Rect::Rect(const Point & x1,const Point & x2)
-	: m_x1(x1), m_x2(x2), Named("Rect")
+Rect::Rect(Point & x1, Point & x2)
+	: Shape("Rect"), m_x1(&x1), m_x2(&x2)
 {
-	m_area = abs( ( m_x1.X() - m_x2.X() ) * ( m_x2.Y() - m_x1.Y() ) );
+	m_area = abs( ( m_x1->X() - m_x2->X() ) * ( m_x2->Y() - m_x1->Y() ) );
 }
 
 void Rect::print(ostream & out) const 
 {
-	m_x1.print(out);
-	m_x2.print(out);
-	out << "area: " << m_area << endl;
+	m_x1->print(out);
+	m_x2->print(out);
+	out << "Area: " << m_area << endl;
 }
 
-Square::Square(const Point & center, float side)
-	: m_center(center), m_side(side), Named("Square") 
+Square::Square(Point & center, float side)
+	: Shape("Square"), m_center(&center), m_side(side)
 {
 	m_area = side * side;
 }
 
 void Square::print(ostream& out) const 
 {
-	m_center.print(out);
-	out << "area: " << m_area << endl;
+	m_center->print(out);
+	out << "Area: " << m_area << endl;
 }
 
-Polyline::Polyline()
-	: Named("Polyline")
+Polyline::Polyline(Container<Point *> & points)
+	: Shape("Polyline"), m_length(0), m_points(&points)
 {
-	m_length = 0;
+	if (m_points->size() == 0) return;
+	calcLength();
 }
 
-void Polyline::AddPoint(const Point & p)
+Polyline::~Polyline() { m_points->clear(); }
+
+void Polyline::calcLength()
 {
-	m_points.push_back(Point(p));
-	CalcLength();
+	uint32_t size = m_points->size() - 1;
+	for (uint32_t i = 0; i < size; i++)
+	{
+		Point* p1 = (*m_points)[i];
+		Point* p2 = (*m_points)[i+1];
+
+		m_length += sqrt(pow(p1->Y() - p2->Y(), 2)
+			+ pow(p1->X() - p2->X(), 2));
+	}
 }
 
-void Polyline::CalcLength()
+void Polyline::addPoint(const Point & p)
 {
-	if (m_points.size() < 2) return;
-	m_length += sqrt(pow(m_points[m_points.size()-1].Y() - m_points[m_points.size() - 1].Y(), 2)
-				+ pow(m_points[m_points.size() - 2].X() - m_points[m_points.size() - 2].X(), 2));
+	Point * tmp = new Point(p);
+	m_points->push_back(tmp);
+	uint32_t s = m_points->size();
+	if (s <= 1) return;
+	Point * p1 = (*m_points)[m_points->size() - 1];
+	Point * p2 = (*m_points)[m_points->size() - 2];
+
+	m_length += sqrt(pow(p1->Y() - p2->Y(), 2)
+		+ pow(p1->X() - p2->X(), 2));
 }
 
 void Polyline::print(ostream& out) const
 {
-	for (uint32_t i = 0; i < m_points.size(); i++)
+	for (uint32_t i = 0; i < m_points->size(); i++)
 	{
-		m_points[i].print(out);
+		(*m_points)[i]->print(out);
 	}
-	out << getLength() << endl; 
+	out  << "Length: " << getLength() << endl; 
 }
 
 float Polyline::getLength() const { return m_length; }
 
-Polygon::Polygon(const Container<Point> & data)
-	: Named("Polygon")
-{
-	for (uint32_t i = 0; i < data.size(); i++)
-	{
-		m_data.AddPoint(data[i]);
-	}
-	m_data.AddPoint(data[0]);
-}
+Polygon::Polygon(Polyline & data)
+	: m_data(&data), Shape("Polygon") {}
 
-void Polygon::print(ostream& out) const { m_data.print(out); }
+Polygon::~Polygon() { delete[] m_data; }
+
+void Polygon::print(ostream& out) const { m_data->print(out); }
