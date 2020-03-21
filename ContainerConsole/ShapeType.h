@@ -6,5 +6,6 @@ enum class ShapeType
     Rect,
     Square,
     Polyline,
-    Polygon
+    Polygon,
+    LENGTH
 };
