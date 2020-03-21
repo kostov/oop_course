@@ -87,5 +87,5 @@ public:
 	~Polygon();
 	void print( ostream & out ) const;
 private:
-	Polyline * shape;
+	Polyline * m_shape;
 };

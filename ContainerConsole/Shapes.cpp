@@ -116,12 +116,12 @@ Point & Polyline::getStartPoint() const { return *(*m_points)[0]; }
 float Polyline::getLength() const { return m_length; }
 
 Polygon::Polygon( Polyline & shape )
-	: shape( &shape ), Shape( "Polygon" )
+	: m_shape( &shape ), Shape( "Polygon" )
 {
 	Point * startPoint = new Point( shape.getStartPoint().X(), shape.getStartPoint().Y() );
 	shape.addPoint( *startPoint );
 }
 
-Polygon::~Polygon() { delete shape; }
+Polygon::~Polygon() { delete m_shape; }
 
-void Polygon::print( ostream & out ) const { shape->print( out ); }
+void Polygon::print( ostream & out ) const { m_shape->print( out ); }

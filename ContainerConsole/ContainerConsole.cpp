@@ -29,8 +29,4 @@ int main()
 	shapes.clear();
 	cout << Shape::getCount() << endl;
 
-	/*Container<int> z;
-	z.push_back(2);
-	z.print(cout);*/
-
 }

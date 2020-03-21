@@ -12,11 +12,11 @@ public:
 
 	Container();
 	Container( uint32_t size );
-	Container( const Container<T> & other );
+	Container( Container<T> const & other );
 
 	T & operator[] ( uint32_t index ) const;
 
-	void push_back( const T & value );
+	void push_back( T const & value );
 	void pop_back();
 	void reserve( uint32_t capacity );
 
@@ -51,7 +51,7 @@ Container<T>::Container( uint32_t size )
 {}
 
 template<class T>
-Container<T>::Container( const Container<T> & other )
+Container<T>::Container( Container<T> const & other )
 	: m_size( other.m_size )
 	, m_capacity( other.m_capacity )
 	, buffer( new uint8_t[m_capacity * sizeof( T )] )
@@ -70,7 +70,7 @@ T & Container<T>::operator [] ( uint32_t index ) const
 }
 
 template<class T>
-void Container<T>::push_back( const T & value )
+void Container<T>::push_back( T const & value )
 {
 	if (m_size == m_capacity)
 	{
